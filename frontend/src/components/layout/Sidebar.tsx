@@ -29,7 +29,6 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({
   isOpen,
   isCollapsed,
-  onToggleCollapse,
   onCloseMobile,
   onOpenRegisterModal,
   onOpenNotifications,
@@ -37,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  // Strict role menu configurations matching PHASE 1 requirements exactly
+  // Strict role menu configurations
   const getNavItemsForRole = (role?: UserRole): NavItemConfig[] => {
     switch (role) {
       case 'patient':
@@ -186,29 +185,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         }`}
         aria-label="Sidebar Navigation"
       >
-        {/* Sidebar Header & Hamburger */}
-        <div className="sidebar-header">
-          <button
-            className="sidebar-hamburger-btn"
-            onClick={onToggleCollapse}
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            title={isCollapsed ? 'Expand sidebar (☰)' : 'Collapse sidebar'}
-          >
-            <Icon name="menu" size={20} />
-          </button>
-
-          {!isCollapsed && (
-            <div className="sidebar-brand">
-              <span className="sidebar-brand-name">DORI</span>
-              <span className="sidebar-brand-sub">Continuity Platform</span>
-            </div>
-          )}
-        </div>
-
         {/* Current Active Role Badge */}
         {!isCollapsed && user && (
           <div className="sidebar-role-indicator">
-            <span className="role-lbl">ACTIVE ROLE</span>
+            <span className="role-lbl">PORTAL CONSOLE</span>
             <span className="role-badge-text">
               {user.role.replace(/_/g, ' ').toUpperCase()}
             </span>

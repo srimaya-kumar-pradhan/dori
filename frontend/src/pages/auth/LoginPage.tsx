@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import { DecorativeBorder } from '../../components/ui/DecorativeBorder';
 import { DoriWordmark } from '../../components/ui/DoriWordmark';
 import { Button } from '../../components/ui/Button';
-import { Badge } from '../../components/ui/Badge';
-import { Icon, type IconName } from '../../components/ui/Icon';
-import { BackgroundPattern } from '../../components/ui/BackgroundPattern';
 import { usePageTitle } from '../../utils/usePageTitle';
 import type { UserRole } from '../../types';
 import './LoginPage.css';
@@ -16,7 +12,7 @@ interface DemoAccount {
   role: UserRole;
   label: string;
   sub: string;
-  icon: IconName;
+  badge: string;
 }
 
 const DEMO_ACCOUNTS: DemoAccount[] = [
@@ -24,57 +20,51 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
     username: 'demo_asha',
     role: 'asha',
     label: 'Sunita Devi',
-    sub: 'ASHA Worker (Karera Sub-Centre)',
-    icon: 'asha',
-  },
-  {
-    username: 'demo_anm',
-    role: 'anm',
-    label: 'Rekha Sharma',
-    sub: 'ANM (Shivpuri PHC)',
-    icon: 'asha',
+    sub: 'Frontline ASHA Worker (Village Sub-Centre)',
+    badge: 'Frontline',
   },
   {
     username: 'demo_mo',
     role: 'medical_officer',
     label: 'Dr. Rajesh Kumar',
-    sub: 'Medical Officer (Shivpuri PHC)',
-    icon: 'doctor',
-  },
-  {
-    username: 'demo_patient',
-    role: 'patient',
-    label: 'Lakshmi Bai',
-    sub: 'Pregnant Mother (G2P1, 14w ANC)',
-    icon: 'patient',
+    sub: 'Medical Officer / Clinician (PHC / OPD)',
+    badge: 'Doctor AI',
   },
   {
     username: 'demo_referral',
     role: 'referral_facility',
     label: 'Dr. Meena Singh',
-    sub: 'Specialist (Shivpuri District Hospital)',
-    icon: 'hospital',
+    sub: 'Chest Specialist (District Hospital)',
+    badge: 'Specialist',
+  },
+  {
+    username: 'demo_patient',
+    role: 'patient',
+    label: 'Lakshmi Bai',
+    sub: 'Citizen / Pregnant Mother (14w ANC)',
+    badge: 'Citizen',
   },
   {
     username: 'demo_dho',
     role: 'district_officer',
     label: 'Dr. Priya Verma',
-    sub: 'District Health Officer (Shivpuri)',
-    icon: 'district',
+    sub: 'District Health Officer (Epidemiology)',
+    badge: 'District',
   },
   {
     username: 'demo_admin',
     role: 'system_admin',
-    label: 'System Admin',
-    sub: 'Platform Administrator',
-    icon: 'admin',
+    label: 'System Administrator',
+    sub: 'Federated Learning & Model Governance',
+    badge: 'Federated AI',
   },
 ];
 
 export const LoginPage: React.FC = () => {
-  usePageTitle('Sign In');
+  usePageTitle('Sign In — DORI Care Infrastructure');
   const { login, error: authError } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [username, setUsername] = useState('demo_asha');
   const [password, setPassword] = useState('dori2024demo');
@@ -111,7 +101,8 @@ export const LoginPage: React.FC = () => {
 
     try {
       const response = await login(username, password);
-      navigate(getDashboardPath(response.user.role));
+      const fromPath = (location.state as { from?: { pathname?: string } })?.from?.pathname;
+      navigate(fromPath || getDashboardPath(response.user.role));
     } catch (err: unknown) {
       setErrorMessage(
         err instanceof Error
@@ -130,11 +121,15 @@ export const LoginPage: React.FC = () => {
     setErrorMessage('');
 
     try {
-      const response = await login(demoUser, 'dori2024demo');
-      navigate(getDashboardPath(response.user.role));
-    } catch {
-      // Fallback navigate to role dashboard
-      navigate(getDashboardPath(demoRole));
+      await login(demoUser, 'dori2024demo');
+      const fromPath = (location.state as { from?: { pathname?: string } })?.from?.pathname;
+      navigate(fromPath || getDashboardPath(demoRole));
+    } catch (err: unknown) {
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : 'Failed to authenticate demo account. Please verify backend server is active.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -142,97 +137,113 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="dori-login-page">
-      <BackgroundPattern opacity={0.04} pattern="jali" />
+      <div className="login-wrapper">
+        {/* Top Header Link */}
+        <div className="login-top-nav">
+          <Link to="/" className="back-home-link">
+            ← Back to Public Overview
+          </Link>
+        </div>
 
-      <div className="login-container">
-        <DecorativeBorder variant="card" motifSize={40} className="login-card">
-          <div className="login-card-inner">
-            <div className="login-header">
-              <DoriWordmark size="md" variant="teal" showTagline={true} />
-              <h2 className="login-title">Sign In to DORI System</h2>
-              <p className="login-subtitle">
-                Unified continuity portal for patients, frontline workers, and clinical providers.
-              </p>
+        <div className="login-main-card">
+          {/* Brand Header */}
+          <div className="login-header">
+            <DoriWordmark size="md" variant="primary" showTagline />
+            <h1 className="login-title">Healthcare Provider & Citizen Portal</h1>
+            <p className="login-subtitle">
+              Sign in with your national healthcare ID or select an instant demo persona.
+            </p>
+          </div>
+
+          {(errorMessage || authError) && (
+            <div className="login-error-alert" role="alert">
+              <span>{errorMessage || authError}</span>
+            </div>
+          )}
+
+          {/* Credentials Form */}
+          <form className="login-form" onSubmit={handleLoginSubmit}>
+            <div className="form-group">
+              <label htmlFor="username" className="form-label">
+                Username / Health Worker ID
+              </label>
+              <input
+                id="username"
+                type="text"
+                className="form-input"
+                placeholder="e.g. demo_asha, demo_mo"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                autoFocus
+              />
             </div>
 
-            {(errorMessage || authError) && (
-              <div className="login-error-banner">
-                <Icon name="alert" size={16} />
-                <span>{errorMessage || authError}</span>
-              </div>
-            )}
-
-            <form className="login-form" onSubmit={handleLoginSubmit}>
-              <div className="form-group">
-                <label className="form-label" htmlFor="username">
-                  Username or Mobile Number
+            <div className="form-group">
+              <div className="form-label-row">
+                <label htmlFor="password" className="form-label">
+                  Password
                 </label>
-                <input
-                  id="username"
-                  type="text"
-                  className="form-input"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="e.g. asha_priya"
-                  required
-                />
+                <span className="demo-pass-hint">Demo: dori2024demo</span>
               </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="password">
-                  Password / PIN
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  className="form-input"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                isLoading={isLoading}
-                className="w-full"
-              >
-                Authenticate & Enter Portal
-              </Button>
-            </form>
-
-            <div className="demo-accounts-divider">
-              <span>OR 1-CLICK DEMO PERSONA LOGIN [DEMO DATA]</span>
+              <input
+                id="password"
+                type="password"
+                className="form-input"
+                placeholder="••••••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
 
-            <div className="demo-personas-list">
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              className="login-submit-btn"
+              isLoading={isLoading}
+            >
+              Sign In to Portal
+            </Button>
+          </form>
+
+          {/* Instant Demo Personas Section */}
+          <div className="demo-personas-section">
+            <div className="demo-divider">
+              <span>Or launch 1-click role simulation</span>
+            </div>
+
+            <div className="demo-accounts-grid">
               {DEMO_ACCOUNTS.map((acc) => (
                 <button
                   key={acc.username}
                   type="button"
-                  className="demo-persona-btn"
+                  className={`demo-account-card ${username === acc.username ? 'selected' : ''}`}
                   onClick={() => handleSelectDemoPersona(acc.username, acc.role)}
+                  disabled={isLoading}
                 >
-                  <span className="persona-btn-icon">
-                    <Icon name={acc.icon} size={20} />
-                  </span>
-                  <div className="persona-btn-info">
-                    <div className="persona-btn-name">
-                      <span>{acc.label}</span>
-                      <Badge variant="teal" size="sm">
-                        {acc.role.toUpperCase()}
-                      </Badge>
+                  <div className="demo-account-info">
+                    <div className="demo-account-name-row">
+                      <span className="demo-account-label">{acc.label}</span>
+                      <span className="demo-role-tag">{acc.badge}</span>
                     </div>
-                    <span className="persona-btn-desc">{acc.sub}</span>
+                    <span className="demo-account-sub">{acc.sub}</span>
                   </div>
                 </button>
               ))}
             </div>
           </div>
-        </DecorativeBorder>
+        </div>
+
+        {/* Security / Compliance Footer */}
+        <div className="login-security-footer">
+          <span>256-Bit Cryptographic Care Passports</span>
+          <span>•</span>
+          <span>DPDP Act 2023 Compliant</span>
+          <span>•</span>
+          <span>MedFed Federated Privacy</span>
+        </div>
       </div>
     </div>
   );

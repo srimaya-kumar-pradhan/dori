@@ -4,18 +4,24 @@ import { patientApi, careGapApi, referralApi, encounterApi } from '../../api/ser
 import { offlineStore } from '../../offline/offlineStore';
 import { useOfflineSync } from '../../offline/useOfflineSync';
 import { PageHeader } from '../../components/ui/PageHeader';
-import { KPIStrip } from '../../components/ui/KPIStrip';
+import { Card } from '../../components/ui/Card';
+import { Modal } from '../../components/ui/Modal';
+import { FormField } from '../../components/ui/FormField';
+import { Table } from '../../components/ui/Table';
+import { Tabs } from '../../components/ui/Tabs';
+import { StatCard } from '../../components/ui/StatCard';
 import { StatusBadge } from '../../components/ui/StatusBadge';
+import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Icon } from '../../components/ui/Icon';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton';
-import { SuccessState } from '../../components/ui/SuccessState';
+import { AlertBanner } from '../../components/ui/AlertBanner';
 import type { Patient, CareGap, Referral } from '../../types';
 import './AshaDashboard.css';
 
 export const AshaDashboard: React.FC = () => {
-  usePageTitle("Today's Work — ASHA Portal");
+  usePageTitle("Frontline Outreach — ASHA / ANM Portal");
   const { isOnline, pendingCount, triggerSync } = useOfflineSync();
 
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -119,339 +125,456 @@ export const AshaDashboard: React.FC = () => {
     }
     setPatients([newPat, ...patients]);
     setEnrollSuccess(true);
-    setTimeout(() => { setEnrollSuccess(false); setActiveTab('patients'); setNewFullName(''); }, 1500);
+    setNewFullName('');
+    setTimeout(() => { setEnrollSuccess(false); setActiveTab('patients'); }, 1200);
   };
 
-  const criticalGaps = careGaps.filter((g) => g.severity === 'critical').length;
+  const tabsConfig = [
+    { id: 'home' as const, label: "Today's Schedule", icon: <Icon name="home" size={16} /> },
+    { id: 'patients' as const, label: 'Community Registry', icon: <Icon name="patient" size={16} />, badge: patients.length },
+    { id: 'gaps' as const, label: 'Care Gaps', icon: <Icon name="alert" size={16} />, badge: careGaps.length, badgeVariant: 'error' as const },
+    { id: 'referrals' as const, label: 'Active Referrals', icon: <Icon name="hospital" size={16} />, badge: referrals.length },
+    { id: 'enroll' as const, label: 'New Registration', icon: <Icon name="add" size={16} /> },
+  ];
 
   return (
-    <div className="asha-dashboard">
-      {/* Page Header */}
+    <div className="dori-dashboard asha-dashboard">
       <PageHeader
-        eyebrow="CARE CONTINUITY"
-        title="Today's Work"
-        description="Review patients requiring follow-up and complete pending care actions."
+        eyebrow="Primary Health Network • Village Sub-Centre"
+        title="Sunita Devi (ASHA Worker) — Outreach Console"
+        description="Monitor community members, execute home outreach visits, log vital signs, and close predictive care gaps."
         action={
-          <Button
-            variant="primary"
-            size="sm"
-            icon={<Icon name="scan" size={16} />}
-            onClick={() => alert('Camera QR Scanner Initialized')}
-          >
-            Scan Care Passport
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              icon={<Icon name="sync" size={14} />}
+              onClick={() => triggerSync()}
+            >
+              {pendingCount > 0 ? `Sync (${pendingCount})` : 'Sync Offline DB'}
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              icon={<Icon name="add" size={14} />}
+              onClick={() => setActiveTab('enroll')}
+            >
+              + Register Patient
+            </Button>
+          </div>
         }
       />
 
-      {/* KPI Strip */}
-      <KPIStrip
-        items={[
-          { label: 'Patients due', value: patients.length, subtitle: 'Enrolled in Shampur SC' },
-          { label: 'Care gaps', value: careGaps.length, subtitle: criticalGaps > 0 ? `${criticalGaps} critical` : 'All routine' },
-          { label: 'Referrals pending', value: referrals.filter(r => r.status !== 'completed').length },
-          { label: 'Sync status', value: isOnline ? 'Online' : `${pendingCount} pending`, subtitle: isOnline ? 'Connected' : 'Offline mode' },
-        ]}
-      />
-
-      {/* Quick Actions */}
-      <div className="asha-quick-actions">
-        <Button variant="primary" size="sm" icon={<Icon name="scan" size={16} />} onClick={() => alert('Camera QR Scanner')}>
-          Scan Care Passport
-        </Button>
-        <Button variant="outline" size="sm" icon={<Icon name="search" size={16} />} onClick={() => setActiveTab('patients')}>
-          Search Patient
-        </Button>
-        <Button variant="outline" size="sm" icon={<Icon name="alert" size={16} />} onClick={() => setActiveTab('gaps')}>
-          View Care Gaps
-        </Button>
-        <Button variant="outline" size="sm" icon={<Icon name="hospital" size={16} />} onClick={() => setActiveTab('referrals')}>
-          Create Referral
-        </Button>
-        {isOnline && pendingCount > 0 && (
-          <Button variant="outline" size="sm" icon={<Icon name="sync" size={16} />} onClick={() => triggerSync()}>
-            Sync ({pendingCount})
-          </Button>
-        )}
+      {/* KPI Metrics */}
+      <div className="grid grid-cols-4 gap-4">
+        <StatCard
+          title="Community Assigned"
+          value={patients.length}
+          subtitle="Shampur Catchment (Ward 1-4)"
+          accentColor="navy"
+          icon={<Icon name="patient" size={20} />}
+        />
+        <StatCard
+          title="Active Care Gaps"
+          value={careGaps.length}
+          subtitle="Flagged by Predictive Engine"
+          accentColor="crimson"
+          trend="Action Required"
+          trendType="negative"
+          icon={<Icon name="alert" size={20} />}
+        />
+        <StatCard
+          title="In-Transit Referrals"
+          value={referrals.length}
+          subtitle="Connected to Ramnagar CHC"
+          accentColor="teal"
+          icon={<Icon name="hospital" size={20} />}
+        />
+        <StatCard
+          title="Sync Status"
+          value={isOnline ? 'Online' : 'Offline'}
+          subtitle={pendingCount > 0 ? `${pendingCount} records queued locally` : 'All local changes synced'}
+          accentColor="green"
+          trend={isOnline ? 'Active' : 'Queueing'}
+          trendType={isOnline ? 'positive' : 'neutral'}
+          icon={<Icon name="sync" size={20} />}
+        />
       </div>
 
-      {/* Tab Navigation */}
-      <nav className="asha-tabs" aria-label="ASHA sections">
-        {[
-          { key: 'home', label: 'Priority Tasks' },
-          { key: 'patients', label: `Patients (${patients.length})` },
-          { key: 'gaps', label: `Care Gaps (${careGaps.length})` },
-          { key: 'referrals', label: `Referrals (${referrals.length})` },
-          { key: 'enroll', label: 'Register New' },
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            className={`asha-tab ${activeTab === tab.key ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.key as typeof activeTab)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </nav>
+      {/* Navigation Tabs */}
+      <Tabs
+        tabs={tabsConfig}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        variant="pills"
+        size="md"
+      />
 
-      {/* Tab: Priority Tasks (Home) */}
+      {/* ─── TAB 1: TODAY'S SCHEDULE ─── */}
       {activeTab === 'home' && (
-        <div className="asha-section">
-          <h2 className="section-heading">Priority Tasks</h2>
-          {isLoading ? (
-            <LoadingSkeleton type="card" count={3} />
-          ) : careGaps.length === 0 ? (
-            <EmptyState icon="check" title="No Pending Tasks" description="All assigned patients are up to date on care schedules." />
-          ) : (
-            <div className="priority-list">
-              {careGaps.map((gap) => {
-                const patient = patients.find((p) => p.id === gap.patient_id);
-                return (
-                  <div key={gap.id} className="priority-card">
-                    <div className="priority-card-left">
-                      <StatusBadge
-                        status={gap.severity === 'critical' ? 'urgent' : 'high-priority'}
-                        label={gap.severity.toUpperCase()}
-                      />
-                      <div className="priority-info">
-                        <span className="priority-patient">{patient?.full_name || 'Unknown Patient'}</span>
-                        <span className="priority-type">{gap.gap_type.replace(/_/g, ' ')}</span>
+        <div className="flex flex-col gap-4">
+          {careGaps.length > 0 && (
+            <AlertBanner
+              variant="warning"
+              title="Predictive Care Gap Identified (Urgent Action)"
+              action={
+                <Button size="sm" variant="gold" onClick={() => setActiveTab('gaps')}>
+                  Review Gaps
+                </Button>
+              }
+            >
+              {careGaps[0].description}
+            </AlertBanner>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <Card variant="bordered">
+              <Card.Header>
+                <Card.Title>
+                  <Icon name="timeline" size={18} color="var(--dori-primary)" />
+                  <span>Scheduled Home Visits Today</span>
+                </Card.Title>
+              </Card.Header>
+              <Card.Content>
+                <div className="flex flex-col gap-3">
+                  {patients.slice(0, 3).map((pat) => (
+                    <div key={pat.id} className="visit-task-row">
+                      <div className="flex items-center gap-3">
+                        <div className="pat-avatar-sm">{pat.full_name.charAt(0)}</div>
+                        <div>
+                          <h4 className="task-pat-name">{pat.full_name}</h4>
+                          <p className="task-pat-meta">{pat.village} • Blood Group: {pat.blood_group || 'B+'}</p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="priority-card-right">
-                      <span className="priority-due">
-                        Due: {gap.due_date ? new Date(gap.due_date).toLocaleDateString() : 'Immediate'}
-                      </span>
                       <Button
-                        variant="primary"
                         size="sm"
+                        variant="outline"
+                        icon={<Icon name="stethoscope" size={14} />}
                         onClick={() => {
-                          setSelectedPatient(patient || null);
+                          setSelectedPatient(pat);
                           setShowVisitModal(true);
                         }}
                       >
-                        Conduct Visit
+                        Log Vitals
                       </Button>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                  ))}
+                </div>
+              </Card.Content>
+            </Card>
+
+            <Card variant="bordered">
+              <Card.Header>
+                <Card.Title>
+                  <Icon name="hospital" size={18} color="var(--dori-teal)" />
+                  <span>Active Visual Referrals</span>
+                </Card.Title>
+              </Card.Header>
+              <Card.Content>
+                <div className="flex flex-col gap-3">
+                  {referrals.map((ref) => (
+                    <div key={ref.id} className="ref-task-row">
+                      <div className="ref-badge-top">
+                        <Badge variant="teal">{ref.referral_token}</Badge>
+                        <Badge variant="crimson">{ref.priority.toUpperCase()}</Badge>
+                      </div>
+                      <p className="ref-reason-text"><strong>Reason:</strong> {ref.reason}</p>
+                      <p className="ref-fac-text">
+                        <span>{ref.referring_facility_id}</span> → <strong>{ref.receiving_facility_id}</strong>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </Card.Content>
+            </Card>
+          </div>
         </div>
       )}
 
-      {/* Tab: Patient Register */}
+      {/* ─── TAB 2: PATIENTS REGISTRY ─── */}
       {activeTab === 'patients' && (
-        <div className="asha-section">
-          <div className="patient-search-bar">
-            <div className="search-input-wrapper">
-              <Icon name="search" size={16} />
+        <Card variant="bordered">
+          <Card.Header>
+            <Card.Title>
+              <Icon name="patient" size={18} color="var(--dori-primary)" />
+              <span>Village Community Health Registry</span>
+            </Card.Title>
+            <div className="search-bar-wrap">
               <input
                 type="text"
-                className="search-input"
-                placeholder="Search patient by name, ID, or village..."
+                className="table-search-input"
+                placeholder="Search by name, ID, or village..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search patients"
               />
             </div>
-          </div>
-
-          {isLoading ? (
-            <LoadingSkeleton type="card" count={3} />
-          ) : filteredPatients.length === 0 ? (
-            <EmptyState
-              icon="search"
-              title="No Matching Patients"
-              description={`No records matching "${searchQuery}". Check spelling or register a new patient.`}
-              actionLabel="Register New Patient"
-              onAction={() => setActiveTab('enroll')}
-            />
-          ) : (
-            <div className="patient-list">
-              {filteredPatients.map((p) => (
-                <div key={p.id} className="patient-card">
-                  <div className="patient-card-main">
-                    <div className="patient-card-identity">
-                      <h3 className="patient-name">{p.full_name}</h3>
-                      <span className="patient-village">{p.village}</span>
-                    </div>
-                    <div className="patient-card-meta">
-                      <StatusBadge status="active" label={p.pseudonymous_id} size="sm" />
-                      <span className="patient-detail">
-                        <Icon name="phone" size={12} />
-                        {p.phone || 'No phone'}
-                      </span>
-                      <span className="patient-detail">
-                        Blood: {p.blood_group}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="patient-card-actions">
-                    <Button variant="primary" size="sm" onClick={() => { setSelectedPatient(p); setShowVisitModal(true); }}>
-                      Log Visit
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => { setSelectedPatient(p); setActiveTab('referrals'); }}>
-                      Refer
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab: Care Gaps */}
-      {activeTab === 'gaps' && (
-        <div className="asha-section">
-          <h2 className="section-heading">Active Care Gaps</h2>
-          {careGaps.length === 0 ? (
-            <EmptyState icon="check" title="No Active Care Gaps" description="All patients are up to date on treatment schedules." />
-          ) : (
-            <div className="gaps-list">
-              {careGaps.map((gap) => (
-                <div key={gap.id} className="gap-card">
-                  <div className="gap-card-header">
-                    <StatusBadge status={gap.severity === 'critical' ? 'urgent' : 'high-priority'} label={`${gap.severity.toUpperCase()} ALERT`} />
-                    <span className="gap-type">{gap.gap_type.replace(/_/g, ' ')}</span>
-                    <span className="gap-due">Due: {gap.due_date ? new Date(gap.due_date).toLocaleDateString() : 'Immediate'}</span>
-                  </div>
-                  <p className="gap-description">{gap.description}</p>
-                  <div className="gap-card-footer">
-                    <Button variant="primary" size="sm" onClick={() => { setSelectedPatient(patients[0] || null); setShowVisitModal(true); }}>
-                      Conduct Visit & Close Gap
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab: Referrals */}
-      {activeTab === 'referrals' && (
-        <div className="asha-section">
-          <h2 className="section-heading">Active Referrals</h2>
-          <p className="section-sub">Track patient transit and receive closed-loop discharge feedback.</p>
-          {referrals.length === 0 ? (
-            <EmptyState icon="hospital" title="No Pending Referrals" description="No active referrals dispatched from this sub-center." />
-          ) : (
-            <div className="referral-list">
-              {referrals.map((r) => (
-                <div key={r.id} className="referral-card">
-                  <div className="referral-card-header">
-                    <span className="referral-token">{r.referral_token}</span>
-                    <StatusBadge status={r.priority === 'urgent' ? 'urgent' : 'routine'} label={r.priority.toUpperCase()} />
-                  </div>
-                  <h4 className="referral-reason">{r.reason}</h4>
-                  <div className="referral-details">
-                    <div className="referral-detail-row"><span className="detail-label">Diagnosis</span><span>{r.diagnosis}</span></div>
-                    <div className="referral-detail-row"><span className="detail-label">Receiving</span><span>{r.receiving_facility_id}</span></div>
-                  </div>
-                  <div className="referral-tracker">
-                    {['Created', 'In Transit', 'Received', 'Completed'].map((step, i) => {
-                      const statusMap: Record<string, number> = { created: 0, issued: 1, in_transit: 1, accepted: 2, arrived: 2, received: 2, completed: 3 };
-                      const currentIdx = statusMap[r.status] ?? 0;
-                      const stepState = i < currentIdx ? 'done' : i === currentIdx ? 'current' : 'pending';
-                      return (
-                        <div key={step} className={`tracker-step tracker-${stepState}`}>
-                          <span className="tracker-indicator">
-                            {stepState === 'done' ? <Icon name="check" size={10} /> : <span>{i + 1}</span>}
-                          </span>
-                          <span className="tracker-label">{step}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab: Register New Patient */}
-      {activeTab === 'enroll' && (
-        <div className="asha-section">
-          <div className="enroll-card">
-            <h2 className="section-heading">Register New Patient</h2>
-            <p className="section-sub">Patient will be enrolled locally with a Care Passport credential.</p>
-
-            {enrollSuccess && (
-              <SuccessState title="Patient Enrolled" message="Care Passport generated successfully." />
-            )}
-
-            {!enrollSuccess && (
-              <form className="enroll-form" onSubmit={handleEnrollPatient}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="new-fullname">Full Name</label>
-                    <input id="new-fullname" type="text" className="form-input" placeholder="e.g. Meena Devi" value={newFullName} onChange={(e) => setNewFullName(e.target.value)} required />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="new-age">Age</label>
-                    <input id="new-age" type="number" className="form-input" value={newAge} onChange={(e) => setNewAge(e.target.value)} required />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="new-village">Village</label>
-                    <input id="new-village" type="text" className="form-input" value={newVillage} onChange={(e) => setNewVillage(e.target.value)} required />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="new-phone">Mobile</label>
-                    <input id="new-phone" type="tel" className="form-input" value={newPhone} onChange={(e) => setNewPhone(e.target.value)} required />
-                  </div>
-                </div>
-                <Button type="submit" variant="primary" size="lg" className="w-full">
-                  Generate Care Passport & Enroll
-                </Button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Modal: Log Home Visit */}
-      {showVisitModal && selectedPatient && (
-        <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-visit-title">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3 id="modal-visit-title">Log Visit: {selectedPatient.full_name}</h3>
-              <button className="modal-close" onClick={() => setShowVisitModal(false)} aria-label="Close">
-                <Icon name="close" size={18} />
-              </button>
-            </div>
-
-            {visitSuccess ? (
-              <SuccessState
-                title="Visit Recorded"
-                message={`Encounter saved ${isOnline ? 'online' : 'to offline queue'}.`}
-                detail={`Sync status: ${isOnline ? 'Synchronized' : 'Pending synchronization'}`}
+          </Card.Header>
+          <Card.Content>
+            {isLoading ? (
+              <LoadingSkeleton count={4} />
+            ) : filteredPatients.length === 0 ? (
+              <EmptyState
+                icon="patient"
+                title="No Patients Found"
+                description="Try a different search query or register a new patient."
               />
             ) : (
-              <form onSubmit={handleLogHomeVisit}>
-                <div className="form-group">
-                  <label htmlFor="modal-bp">Blood Pressure</label>
-                  <input id="modal-bp" type="text" className="form-input" value={visitBP} onChange={(e) => setVisitBP(e.target.value)} placeholder="e.g. 120/80" required />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="modal-notes">Clinical Notes</label>
-                  <textarea id="modal-notes" className="form-input form-textarea" value={visitNotes} onChange={(e) => setVisitNotes(e.target.value)} rows={3} required />
-                </div>
-                <div className="modal-actions">
-                  <Button variant="ghost" size="sm" onClick={() => setShowVisitModal(false)}>Cancel</Button>
-                  <Button type="submit" variant="primary" size="sm">
-                    Save ({isOnline ? 'Online' : 'Offline Queue'})
-                  </Button>
-                </div>
-              </form>
+              <Table hoverable>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.Head>Patient Name & ID</Table.Head>
+                    <Table.Head>Village Ward</Table.Head>
+                    <Table.Head>Blood Group</Table.Head>
+                    <Table.Head>ABHA ID</Table.Head>
+                    <Table.Head>Status</Table.Head>
+                    <Table.Head>Action</Table.Head>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {filteredPatients.map((pat) => (
+                    <Table.Row key={pat.id}>
+                      <Table.Cell>
+                        <strong>{pat.full_name}</strong>
+                        <div className="cell-sub">{pat.pseudonymous_id}</div>
+                      </Table.Cell>
+                      <Table.Cell>{pat.village || 'Shampur Ward 3'}</Table.Cell>
+                      <Table.Cell>
+                        <Badge variant="neutral">{pat.blood_group || 'B+'}</Badge>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <span className="font-mono text-xs">{pat.abha_id || '91-4829-1920-1122'}</span>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <StatusBadge status="verified" label="Care Passport Issued" size="sm" />
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          icon={<Icon name="stethoscope" size={14} />}
+                          onClick={() => {
+                            setSelectedPatient(pat);
+                            setShowVisitModal(true);
+                          }}
+                        >
+                          Log Visit
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
             )}
-          </div>
-        </div>
+          </Card.Content>
+        </Card>
       )}
+
+      {/* ─── TAB 3: CARE GAPS ─── */}
+      {activeTab === 'gaps' && (
+        <Card variant="bordered">
+          <Card.Header>
+            <Card.Title>
+              <Icon name="alert" size={18} color="var(--dori-crimson)" />
+              <span>Predictive Care Gaps & Drop-Out Prevention</span>
+            </Card.Title>
+          </Card.Header>
+          <Card.Content>
+            <div className="flex flex-col gap-3">
+              {careGaps.map((gap) => (
+                <div key={gap.id} className="care-gap-item-card">
+                  <div className="gap-item-header">
+                    <Badge variant={gap.severity === 'critical' ? 'crimson' : 'gold'}>
+                      {gap.severity.toUpperCase()} RISK
+                    </Badge>
+                    <span className="gap-type-label">{gap.gap_type}</span>
+                  </div>
+                  <p className="gap-desc">{gap.description}</p>
+                  <div className="gap-action-row">
+                    <span className="gap-due-date">Due: {gap.due_date ? new Date(gap.due_date).toLocaleDateString() : 'Immediate'}</span>
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      icon={<Icon name="check" size={14} />}
+                      onClick={() => {
+                        alert(`Action plan recorded for ${gap.id}. Scheduled home outreach visit.`);
+                      }}
+                    >
+                      Resolve & Assign Visit
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card.Content>
+        </Card>
+      )}
+
+      {/* ─── TAB 4: ACTIVE REFERRALS ─── */}
+      {activeTab === 'referrals' && (
+        <Card variant="bordered">
+          <Card.Header>
+            <Card.Title>
+              <Icon name="hospital" size={18} color="var(--dori-primary)" />
+              <span>Active Continuity Referrals</span>
+            </Card.Title>
+          </Card.Header>
+          <Card.Content>
+            <Table hoverable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.Head>Referral Token</Table.Head>
+                  <Table.Head>Priority</Table.Head>
+                  <Table.Head>Reason & Diagnosis</Table.Head>
+                  <Table.Head>From → To Facility</Table.Head>
+                  <Table.Head>Status</Table.Head>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {referrals.map((ref) => (
+                  <Table.Row key={ref.id}>
+                    <Table.Cell><strong>{ref.referral_token}</strong></Table.Cell>
+                    <Table.Cell>
+                      <Badge variant={ref.priority === 'urgent' ? 'crimson' : 'teal'}>
+                        {ref.priority.toUpperCase()}
+                      </Badge>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div>{ref.reason}</div>
+                      <div className="cell-sub">{ref.diagnosis}</div>
+                    </Table.Cell>
+                    <Table.Cell>
+                      {ref.referring_facility_id} → <strong>{ref.receiving_facility_id}</strong>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <StatusBadge status="pending" label="In Transit / Active" size="sm" />
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Card.Content>
+        </Card>
+      )}
+
+      {/* ─── TAB 5: NEW REGISTRATION ─── */}
+      {activeTab === 'enroll' && (
+        <Card variant="bordered" className="max-w-2xl mx-auto">
+          <Card.Header>
+            <Card.Title>
+              <Icon name="add" size={18} color="var(--dori-primary)" />
+              <span>Direct Community Member Registration</span>
+            </Card.Title>
+            <Card.Description>
+              Issues an offline-scannable cryptographic Care Passport immediately.
+            </Card.Description>
+          </Card.Header>
+          <Card.Content>
+            {enrollSuccess && (
+              <AlertBanner variant="success" title="Care Passport Generated!">
+                Patient successfully registered into local offline store and cloud relay.
+              </AlertBanner>
+            )}
+            <form onSubmit={handleEnrollPatient} className="flex flex-col gap-3">
+              <FormField label="Full Name" required>
+                <input
+                  type="text"
+                  placeholder="e.g. Kavita Devi"
+                  value={newFullName}
+                  onChange={(e) => setNewFullName(e.target.value)}
+                  required
+                />
+              </FormField>
+
+              <div className="grid grid-cols-2 gap-3">
+                <FormField label="Age" required>
+                  <input
+                    type="number"
+                    value={newAge}
+                    onChange={(e) => setNewAge(e.target.value)}
+                    required
+                  />
+                </FormField>
+                <FormField label="Phone Number" required>
+                  <input
+                    type="tel"
+                    value={newPhone}
+                    onChange={(e) => setNewPhone(e.target.value)}
+                    required
+                  />
+                </FormField>
+              </div>
+
+              <FormField label="Village / Catchment Area" required>
+                <input
+                  type="text"
+                  value={newVillage}
+                  onChange={(e) => setNewVillage(e.target.value)}
+                  required
+                />
+              </FormField>
+
+              <Card.Footer>
+                <Button type="submit" variant="primary" size="lg" icon={<Icon name="check" size={16} />}>
+                  Issue Care Passport
+                </Button>
+              </Card.Footer>
+            </form>
+          </Card.Content>
+        </Card>
+      )}
+
+      {/* ─── MODAL: LOG HOME VISIT VITALS ─── */}
+      <Modal
+        isOpen={showVisitModal}
+        onClose={() => setShowVisitModal(false)}
+        title={`Log Home Outreach Visit — ${selectedPatient?.full_name || 'Patient'}`}
+        subtitle={`PID: ${selectedPatient?.pseudonymous_id || ''}`}
+        footer={
+          <div className="flex gap-2 justify-end w-full">
+            <Button variant="secondary" onClick={() => setShowVisitModal(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleLogHomeVisit}
+              icon={<Icon name="check" size={16} />}
+            >
+              Save Outreach Vitals
+            </Button>
+          </div>
+        }
+      >
+        {visitSuccess ? (
+          <AlertBanner variant="success" title="Encounter Recorded!">
+            Vitals saved and synchronized to patient longitudinal timeline.
+          </AlertBanner>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-2 gap-3">
+              <FormField label="Blood Pressure (Systolic/Diastolic)" required hint="e.g. 120/80 mmHg">
+                <input
+                  type="text"
+                  value={visitBP}
+                  onChange={(e) => setVisitBP(e.target.value)}
+                  required
+                />
+              </FormField>
+              <FormField label="Encounter Type">
+                <input type="text" value="ASHA Village Outreach" disabled />
+              </FormField>
+            </div>
+
+            <FormField label="Clinical Observations & Notes" required>
+              <textarea
+                rows={3}
+                value={visitNotes}
+                onChange={(e) => setVisitNotes(e.target.value)}
+                placeholder="Log symptoms, medication adherence, or maternal warning signs..."
+              />
+            </FormField>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

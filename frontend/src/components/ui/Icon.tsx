@@ -40,7 +40,11 @@ export type IconName =
   | 'chevron-up'
   | 'chevron-down'
   | 'xray'
-  | 'home';
+  | 'home'
+  | 'plus'
+  | 'add'
+  | 'arrow-left'
+  | 'warning';
 
 interface IconProps {
   name: IconName;
@@ -284,6 +288,18 @@ export const Icon: React.FC<IconProps> = ({
         return (
           <>
             <path d="M3 9.5 L12 3 L21 9.5 V20 C21 20.5 20.5 21 20 21 H15 V15 H9 V21 H4 C3.5 21 3 20.5 3 20 V9.5 Z" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </>
+        );
+      case 'plus':
+      case 'add':
+        return <path d="M12 5 V19 M5 12 H19" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />;
+      case 'arrow-left':
+        return <path d="M19 12 L5 12 M11 18 L5 12 L11 6" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />;
+      case 'warning':
+        return (
+          <>
+            <path d="M12 3 L22 20 L2 20 Z" stroke={color} strokeWidth="2" strokeLinejoin="round" fill="none" />
+            <path d="M12 9 L12 14 M12 17 L12.01 17" stroke={color} strokeWidth="2" strokeLinecap="round" />
           </>
         );
       default:

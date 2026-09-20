@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
-import { DemoController } from '../demo/DemoController';
 import { DoriWordmark } from '../ui/DoriWordmark';
-import { StatusBadge } from '../ui/StatusBadge';
-import { DemoBadge } from '../ui/DemoBadge';
 import { Button } from '../ui/Button';
 import { Icon } from '../ui/Icon';
-import { useOfflineSync } from '../../offline/useOfflineSync';
 import { NotificationPanel } from '../ui/NotificationPanel';
 import { ProductTour } from '../tour/ProductTour';
 import { Sidebar } from './Sidebar';
@@ -17,7 +13,6 @@ import './AppLayout.css';
 export const AppLayout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { isOnline, pendingCount } = useOfflineSync();
 
   // Navigation and Drawer states
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -37,21 +32,11 @@ export const AppLayout: React.FC = () => {
     ? user.role.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
     : 'Portal';
 
-  const isClinicianOrFrontline =
-    user?.role === 'medical_officer' ||
-    user?.role === 'asha' ||
-    user?.role === 'anm' ||
-    user?.role === 'system_admin';
-
   return (
     <div className="dori-app-shell">
-      {/* Demo Mode Bar */}
-      <DemoController />
-
-      {/* Main Top Header */}
+      {/* Main Clean Top Header */}
       <header className="app-header">
         <div className="header-left">
-          {/* Global Hamburger Toggle (Phase 1) */}
           <button
             className="header-hamburger-trigger"
             onClick={() => {
@@ -61,61 +46,24 @@ export const AppLayout: React.FC = () => {
                 setIsSidebarCollapsed(!isSidebarCollapsed);
               }
             }}
-            aria-label="Toggle navigation menu (☰)"
-            title="Toggle navigation menu (☰)"
+            aria-label="Toggle navigation menu"
+            title="Toggle navigation menu"
           >
-            <Icon name="menu" size={20} />
+            <Icon name="menu" size={18} />
           </button>
 
           <Link to="/" className="app-logo-link" aria-label="DORI Home">
-            <DoriWordmark size="sm" showTagline={false} variant="gold" />
+            <DoriWordmark size="sm" showTagline={false} variant="primary" />
           </Link>
         </div>
 
         <div className="header-right">
-          {/* Quick Register Patient Trigger for ASHA / Doctor */}
-          {isClinicianOrFrontline && (
-            <Button
-              variant="outline"
-              size="sm"
-              icon={<Icon name="patient" size={14} />}
-              onClick={() => setIsRegisterModalOpen(true)}
-            >
-              Register Patient
-            </Button>
-          )}
-
-          {/* Connection status */}
-          <div className="connection-indicator">
-            {isOnline ? (
-              <StatusBadge status="online" label="Online" size="sm" />
-            ) : (
-              <StatusBadge
-                status="offline"
-                label={pendingCount > 0 ? `Offline · ${pendingCount} pending` : 'Offline'}
-                size="sm"
-              />
-            )}
-          </div>
-
-          {/* Demo data badge */}
-          <DemoBadge />
-
-          {/* Architecture Tour Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsTourOpen(true)}
-            icon={<Icon name="brain" size={14} />}
-          >
-            Tour
-          </Button>
-
           {/* Notification Center Trigger */}
           <button
             className="header-icon-btn"
             onClick={() => setIsNotificationOpen(true)}
             aria-label="Open notifications"
+            title="Notifications"
           >
             <Icon name="alert" size={16} />
             {unreadNotifs > 0 && <span className="header-notif-dot">{unreadNotifs}</span>}
@@ -132,7 +80,7 @@ export const AppLayout: React.FC = () => {
             </div>
           </div>
 
-          <Button variant="ghost" size="sm" onClick={handleLogout} className="header-logout-btn">
+          <Button variant="outline" size="sm" onClick={handleLogout} className="header-logout-btn">
             Logout
           </Button>
         </div>
@@ -156,17 +104,16 @@ export const AppLayout: React.FC = () => {
         </main>
       </div>
 
-      {/* Live Patient Registration Modal (Phase 2) */}
+      {/* Live Patient Registration Modal */}
       <RegisterPatientModal
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
         onPatientCreated={(newPat) => {
-          // Toast or auto-notification
           console.log('Patient registered:', newPat);
         }}
       />
 
-      {/* Notification Center Drawer (Phase 16) */}
+      {/* Notification Center Drawer */}
       <NotificationPanel
         isOpen={isNotificationOpen}
         onClose={() => setIsNotificationOpen(false)}

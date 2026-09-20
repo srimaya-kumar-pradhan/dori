@@ -6,6 +6,7 @@ import { ProtectedRoute } from './auth/ProtectedRoute';
 import { AppLayout } from './components/layout/AppLayout';
 import { LandingPage } from './pages/public/LandingPage';
 import { LoginPage } from './pages/auth/LoginPage';
+import { UnauthorizedPage } from './pages/auth/UnauthorizedPage';
 import { PrivacyPage } from './pages/public/PrivacyPage';
 import { TermsPage } from './pages/public/TermsPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
@@ -26,36 +27,37 @@ export const App: React.FC = () => {
       <DemoProvider>
         <BrowserRouter>
           <Routes>
-            {/* Public Website & Auth */}
+            {/* Public Pages */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/404" element={<NotFoundPage />} />
 
             {/* Authenticated Application Shell */}
             <Route element={<AppLayout />}>
-              {/* Patient Portal */}
+              {/* Citizen / Patient Portal */}
               <Route
                 path="/patient/*"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['patient', 'system_admin']}>
                     <PatientDashboard />
                   </ProtectedRoute>
                 }
               />
 
-              {/* ASHA / ANM Frontline */}
+              {/* ASHA / ANM Frontline Outreach */}
               <Route
                 path="/asha/*"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['asha', 'anm', 'system_admin']}>
                     <AshaDashboard />
                   </ProtectedRoute>
                 }
               />
 
-              {/* Medical Officer OPD & Doctor Chest X-Ray AI (Phases 6-9) */}
+              {/* Medical Officer OPD & Clinical Workstation */}
               <Route
                 path="/mo/chest-xray"
                 element={
@@ -93,7 +95,7 @@ export const App: React.FC = () => {
               <Route
                 path="/dho/*"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['district_officer', 'state_admin', 'system_admin']}>
                     <DistrictOfficerDashboard />
                   </ProtectedRoute>
                 }
@@ -101,7 +103,7 @@ export const App: React.FC = () => {
               <Route
                 path="/state/*"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['district_officer', 'state_admin', 'system_admin']}>
                     <DistrictOfficerDashboard />
                   </ProtectedRoute>
                 }
@@ -111,13 +113,13 @@ export const App: React.FC = () => {
               <Route
                 path="/referral/*"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={['referral_facility', 'medical_officer', 'system_admin']}>
                     <ReferralFacilityDashboard />
                   </ProtectedRoute>
                 }
               />
 
-              {/* System Administration & Federated Learning (Phases 10-11) */}
+              {/* System Administration & Federated Learning */}
               <Route
                 path="/admin/federated-learning"
                 element={
