@@ -1,0 +1,648 @@
+/* ─── Federated Learning & Model Governance Styles ──────────── */
+.fed-learning-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+.fed-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fed-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.fed-toast.success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.fed-toast.info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+/* ─── Navigation Tabs ────────────────────────────────── */
+.fed-nav-tabs {
+  display: flex;
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 4px;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.fed-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #64748b);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.fed-tab:hover {
+  color: var(--color-text-primary, #1e293b);
+}
+
+.fed-tab.active {
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--color-primary, #0f766e);
+  font-weight: 700;
+}
+
+/* ─── Privacy Mandate Banner ─────────────────────────── */
+.privacy-mandate-banner {
+  display: flex;
+  align-items: stretch;
+  background: #ffffff;
+  border: 2px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+.mandate-col {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mandate-divider {
+  width: 1px;
+  background: var(--color-border, #e2e8f0);
+}
+
+.mandate-tag-shield {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #be123c;
+  letter-spacing: 0.05em;
+}
+
+.mandate-tag-network {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--color-primary, #0f766e);
+  letter-spacing: 0.05em;
+}
+
+.mandate-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1e293b);
+  margin: 0;
+}
+
+.mandate-desc {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #64748b);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ─── Architecture Topology Canvas ───────────────────── */
+.architecture-diagram-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px;
+}
+
+.diagram-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1e293b);
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.topology-canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.topology-level {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.topology-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  border: 2px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: 16px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.global-model-box {
+  border-color: var(--color-primary, #0f766e);
+  background: rgba(15, 118, 110, 0.04);
+  width: 520px;
+}
+
+.global-model-box.pulsing {
+  animation: box-pulse 1s infinite alternate;
+}
+
+.box-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border, #e2e8f0);
+  color: var(--color-primary, #0f766e);
+  flex-shrink: 0;
+}
+
+.box-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.box-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-text-tertiary, #94a3b8);
+  letter-spacing: 0.05em;
+}
+
+.box-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1e293b);
+}
+
+.box-meta {
+  font-size: 0.72rem;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.box-status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.box-status.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.box-status.secure {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Connectors */
+.topology-connector-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 600px;
+  position: relative;
+  height: 48px;
+}
+
+.topology-connector-tree .stem-down {
+  width: 2px;
+  height: 24px;
+  background: var(--color-primary, #0f766e);
+}
+
+.topology-connector-tree .horizontal-bar {
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary, #0f766e);
+}
+
+.topology-connector-tree .branch {
+  position: absolute;
+  top: 24px;
+  width: 2px;
+  height: 24px;
+  background: var(--color-primary, #0f766e);
+}
+
+.topology-connector-tree .branch-left {
+  left: 10%;
+}
+
+.topology-connector-tree .branch-center {
+  left: 50%;
+}
+
+.topology-connector-tree .branch-right {
+  right: 10%;
+}
+
+.topology-connector-tree.inverted {
+  transform: rotate(180deg);
+}
+
+/* Hospital Node Cards */
+.level-nodes {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.hospital-node-card {
+  flex: 1;
+  background: var(--color-surface-sunken, #f8fafc);
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: var(--radius-md, 8px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary, #0f766e);
+}
+
+.node-facility {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1e293b);
+}
+
+.node-data-pill code {
+  font-size: 0.72rem;
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.node-training-state {
+  font-size: 0.68rem;
+  color: #166534;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* Aggregation Level */
+.level-aggregation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 520px;
+}
+
+.aggregation-box,
+.privacy-box {
+  width: 100%;
+}
+
+.flow-arrow {
+  color: var(--color-primary, #0f766e);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ─── Model Registry Table (Phase 11) ────────────────── */
+.models-table-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+}
+
+.table-header-strip {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
+}
+
+.table-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1e293b);
+  margin: 0;
+}
+
+.table-sub {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary, #64748b);
+}
+
+.fed-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.fed-table th {
+  background: var(--color-surface-sunken, #f8fafc);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-tertiary, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+}
+
+.fed-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
+  color: var(--color-text-secondary, #475569);
+}
+
+.sub-model-info {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary, #94a3b8);
+}
+
+.dataset-pill {
+  font-size: 0.75rem;
+  background: var(--color-surface-sunken, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.privacy-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.registry-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+
+.registry-badge.approved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.registry-badge.archived {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.tag-demo {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0f766e;
+  background: #f0fdfa;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ─── Hospital Nodes Tab ─────────────────────────────── */
+.nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.node-detail-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: 16px;
+}
+
+.node-card-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
+}
+
+.node-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(15, 118, 110, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary, #0f766e);
+}
+
+.node-card-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1e293b);
+  margin: 0;
+}
+
+.node-card-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.metric-lbl {
+  color: var(--color-text-tertiary, #64748b);
+}
+
+.metric-val {
+  font-weight: 600;
+  color: var(--color-text-primary, #1e293b);
+}
+
+/* ─── Local Storage & Vector Engine Tab (Phase 3) ────── */
+.storage-status-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px;
+}
+
+.storage-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
+}
+
+.storage-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(15, 118, 110, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.storage-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-primary, #0f766e);
+  letter-spacing: 0.05em;
+}
+
+.storage-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-text-primary, #1e293b);
+  margin: 2px 0 4px 0;
+}
+
+.storage-subtitle {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary, #64748b);
+  margin: 0;
+}
+
+.storage-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.storage-metric-box {
+  background: var(--color-surface-sunken, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.storage-metric-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary, #64748b);
+  text-transform: uppercase;
+}
+
+.storage-metric-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-text-primary, #1e293b);
+  font-family: var(--font-mono, monospace);
+}
+
+.storage-metric-value.status-connected {
+  color: #166534;
+  font-size: 1.1rem;
+}
+
+.storage-engine-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary, #475569);
+}
+
+.storage-notice-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.78rem;
+  color: var(--color-text-tertiary, #64748b);
+  line-height: 1.45;
+  margin-top: 12px;
+}
+
+@keyframes box-pulse {
+  from {
+    box-shadow: 0 0 0 0 rgba(15, 118, 110, 0.4);
+  }
+  to {
+    box-shadow: 0 0 0 8px rgba(15, 118, 110, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-mandate-banner {
+    flex-direction: column;
+  }
+  .mandate-divider {
+    width: 100%;
+    height: 1px;
+  }
+  .storage-metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .topology-connector-tree {
+    width: 100%;
+  }
+  .level-nodes {
+    flex-direction: column;
+  }
+}

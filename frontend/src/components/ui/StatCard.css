@@ -1,0 +1,94 @@
+.dori-stat-card {
+  background-color: var(--color-cream, #f5f0e6);
+  border-radius: var(--card-radius, 3px);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-light-gray);
+  border-left: 4px solid var(--color-teal);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 3px 3px 0 0 rgba(13, 79, 79, 0.15);
+}
+
+.dori-stat-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 0 rgba(13, 79, 79, 0.2);
+}
+
+.stat-accent-teal {
+  border-top: 4px solid var(--color-teal);
+}
+.stat-accent-crimson {
+  border-top: 4px solid var(--color-crimson);
+}
+.stat-accent-gold {
+  border-top: 4px solid var(--color-gold);
+}
+.stat-accent-green {
+  border-top: 4px solid var(--color-deep-green);
+}
+.stat-accent-navy {
+  border-top: 4px solid var(--color-navy);
+}
+
+.stat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.stat-card-title {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-warm-gray);
+}
+
+.stat-card-icon {
+  color: var(--color-teal);
+  display: flex;
+  align-items: center;
+}
+
+.stat-card-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-gray);
+  line-height: 1.1;
+  margin-bottom: var(--space-2);
+}
+
+.stat-card-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.stat-trend {
+  font-weight: var(--weight-bold);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+.trend-positive {
+  background-color: #e6f6ee;
+  color: var(--color-success);
+}
+.trend-negative {
+  background-color: #feecee;
+  color: var(--color-error);
+}
+.trend-neutral {
+  background-color: var(--color-light-gray);
+  color: var(--color-warm-gray);
+}
+
+.stat-subtitle {
+  color: var(--color-warm-gray);
+}

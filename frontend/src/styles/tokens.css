@@ -1,0 +1,334 @@
+/* DORI Design System Tokens
+   Two visual modes:
+   - MODE A (Public/Presentation): Indian folk-art identity, Playfair Display, decorative frames
+   - MODE B (Operational): Clean healthcare workspace, Inter, light surfaces, task clarity
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ─── DORI Brand Colors (Preserved Identity) ──────── */
+  --dori-teal: #1a6b6a;
+  --dori-teal-dark: #145453;
+  --dori-teal-deep: #0d4f4f;
+  --dori-teal-light: #e8f4f3;
+  --dori-crimson: #8b1a2b;
+  --dori-crimson-dark: #6b1520;
+  --dori-crimson-light: #f5e8eb;
+  --dori-gold: #c9a84c;
+  --dori-gold-dark: #a8893d;
+  --dori-gold-light: #f5f0e0;
+  --dori-deep-green: #1b4332;
+  --dori-navy: #1b2a4a;
+  --dori-burgundy: #6b1d2e;
+
+  /* ─── Operational Surface Colors ───────────────────── */
+  --surface-primary: #FAFAF8;
+  --surface-secondary: #F5F4F1;
+  --surface-card: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+  --surface-hover: #F7F6F3;
+  --surface-active: #EFEEE9;
+  --surface-overlay: rgba(26, 35, 50, 0.5);
+
+  /* ─── Operational Text Colors ──────────────────────── */
+  --text-primary: #1A2332;
+  --text-secondary: #5A6577;
+  --text-tertiary: #8B95A5;
+  --text-inverse: #FFFFFF;
+  --text-brand: var(--dori-teal);
+  --text-accent: var(--dori-crimson);
+
+  /* ─── Operational Border Colors ────────────────────── */
+  --border-default: #E2E5EA;
+  --border-subtle: #F0F1F3;
+  --border-strong: #CBD0D8;
+  --border-brand: var(--dori-teal);
+  --border-focus: var(--dori-teal);
+
+  /* ─── Semantic / Status Colors ─────────────────────── */
+  --color-success: #0F7B3F;
+  --color-success-bg: #ECFDF3;
+  --color-success-border: #A6F4C5;
+  --color-warning: #B25E09;
+  --color-warning-bg: #FFFAEB;
+  --color-warning-border: #FEDF89;
+  --color-error: #B42318;
+  --color-error-bg: #FEF3F2;
+  --color-error-border: #FECDCA;
+  --color-info: #1a6b6a;
+  --color-info-bg: #e8f4f3;
+  --color-info-border: #B2DFDB;
+
+  /* ─── Status Chip Colors ───────────────────────────── */
+  --status-verified-bg: #ECFDF3;
+  --status-verified-text: #067647;
+  --status-verified-icon: #12B76A;
+  --status-pending-bg: #FFFAEB;
+  --status-pending-text: #B54708;
+  --status-pending-icon: #F79009;
+  --status-completed-bg: #EFF8FF;
+  --status-completed-text: #175CD3;
+  --status-completed-icon: #2E90FA;
+  --status-error-bg: #FEF3F2;
+  --status-error-text: #B42318;
+  --status-error-icon: #F04438;
+  --status-offline-bg: #F2F4F7;
+  --status-offline-text: #475467;
+  --status-offline-icon: #98A2B3;
+  --status-high-priority-bg: #FEF3F2;
+  --status-high-priority-text: #B42318;
+  --status-routine-bg: #F2F4F7;
+  --status-routine-text: #475467;
+
+  /* ─── Priority Tiers ───────────────────────────────── */
+  --priority-urgent-bg: #FEF3F2;
+  --priority-urgent-text: #B42318;
+  --priority-urgent-border: #F04438;
+  --priority-high-bg: #FFF6ED;
+  --priority-high-text: #B93815;
+  --priority-high-border: #F38744;
+  --priority-routine-bg: #EFF8FF;
+  --priority-routine-text: #175CD3;
+  --priority-routine-border: #53B1FD;
+  --priority-info-bg: #F9FAFB;
+  --priority-info-text: #475467;
+  --priority-info-border: #D0D5DD;
+
+  /* ─── Typography ─────────────────────────────────────── */
+  --font-heading: 'Inter', 'Source Sans 3', -apple-system, sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', 'Source Sans 3', 'Segoe UI', -apple-system, sans-serif;
+  --font-mono: 'Source Code Pro', 'Courier New', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.5rem;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+
+  --lh-tight: 1.1;
+  --lh-snug: 1.25;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.6;
+
+  --ls-tight: -0.025em;
+  --ls-normal: 0;
+  --ls-wide: 0.05em;
+  --ls-wider: 0.1em;
+
+  /* ─── Spacing ────────────────────────────────────────── */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* ─── Border & Radius ────────────────────────────────── */
+  --border-thin: 1px;
+  --border-medium: 2px;
+  --border-thick: 4px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ─── Shadows ────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.1), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.1), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --shadow-lg: 0 12px 16px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
+  --shadow-xl: 0 20px 24px -4px rgba(16, 24, 40, 0.08), 0 8px 8px -4px rgba(16, 24, 40, 0.03);
+
+  /* ─── Transitions ────────────────────────────────────── */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 350ms;
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: var(--duration-fast) var(--ease-default);
+  --transition-base: var(--duration-base) var(--ease-default);
+  --transition-slow: var(--duration-slow) var(--ease-default);
+
+  /* ─── Z-Index ────────────────────────────────────────── */
+  --z-base: 0;
+  --z-elevated: 10;
+  --z-sticky: 100;
+  --z-dropdown: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-demo-bar: 450;
+  --z-critical: 500;
+
+  /* ─── Component Dimensions ───────────────────────────── */
+  --app-header-height: 56px;
+  --subnav-height: 44px;
+  --sidebar-width: 240px;
+  --sidebar-width-collapsed: 64px;
+  --content-max-width: 1200px;
+  --mobile-bottom-nav-height: 60px;
+
+  /* ─── Frame & Poster System (Mode A — Public/Presentation only) ── */
+  --dori-frame-teal: #0d4f4f;
+  --dori-frame-teal-deep: #0a3a3a;
+  --dori-crimson-bg: #8b1a2b;
+  --dori-parchment: #e8c84c;
+  --dori-parchment-muted: #d4b44a;
+  --dori-parchment-light: #f2e28a;
+  --frame-width: 22px;
+  --frame-width-mobile: 12px;
+  --frame-pattern-width: 18px;
+  --frame-pattern-width-mobile: 10px;
+  --inner-border-width: 2px;
+  --card-border-width: 3px;
+  --card-offset: 8px;
+  --card-offset-mobile: 5px;
+  --card-radius: 3px;
+  --section-gap: 3rem;
+
+  /* Legacy compat aliases */
+  --color-teal: var(--dori-teal);
+  --color-teal-dark: var(--dori-teal-dark);
+  --color-teal-light: var(--dori-teal-light);
+  --color-crimson: var(--dori-crimson);
+  --color-crimson-dark: var(--dori-crimson-dark);
+  --color-crimson-light: var(--dori-crimson-light);
+  --color-gold: var(--dori-gold);
+  --color-gold-dark: var(--dori-gold-dark);
+  --color-gold-light: var(--dori-gold-light);
+  --color-deep-green: var(--dori-deep-green);
+  --color-navy: var(--dori-navy);
+  --color-burgundy: var(--dori-burgundy);
+  --color-white: #ffffff;
+  --color-off-white: #faf8f5;
+  --color-cream: #f5f0e6;
+  --color-warm-gray: #6b6560;
+  --color-dark-gray: #2d2926;
+  --color-light-gray: #e8e4e0;
+
+  /* Legacy shadow compat */
+  --shadow-hero: var(--shadow-xl);
+
+  /* Legacy header compat */
+  --header-height: var(--app-header-height);
+  --corner-motif-size: 80px;
+  --corner-motif-size-mobile: 48px;
+}
+
+/* ─── Global Reset & Base ────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--lh-normal);
+  color: var(--text-primary);
+  background-color: var(--surface-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+  letter-spacing: var(--ls-tight);
+}
+
+/* Public/presentation mode uses display font for headings */
+.mode-public h1,
+.mode-public h2 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+}
+
+a {
+  color: var(--dori-teal);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--dori-teal-dark);
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+/* ─── Focus Styles (Accessibility) ───────────────── */
+:focus-visible {
+  outline: 2px solid var(--dori-teal);
+  outline-offset: 2px;
+}
+
+/* ─── Reduced Motion ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Utility Classes ────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+/* Truncate single line */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

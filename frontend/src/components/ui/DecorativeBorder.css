@@ -1,0 +1,179 @@
+.dori-decorative-border {
+  position: relative;
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-base);
+  overflow: hidden;
+}
+
+/* Hero Variant — deep crimson with teal frame, poster-style */
+.dori-border-hero {
+  border: var(--border-hero) solid var(--dori-frame-teal, #0d4f4f);
+  background: linear-gradient(180deg, #8b1a2b 0%, #6b1520 100%);
+  color: var(--color-white);
+  box-shadow:
+    0 var(--card-offset) 0 0 var(--dori-frame-teal-deep, #0a3a3a),
+    var(--card-offset) 0 0 0 var(--dori-frame-teal-deep, #0a3a3a),
+    var(--card-offset) var(--card-offset) 0 0 var(--dori-frame-teal-deep, #0a3a3a);
+}
+
+.dori-border-hero::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: var(--inner-border-width) solid var(--color-gold, #c9a84c);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Hero subtle textile pattern overlay */
+.dori-border-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(90, 21, 32, 0.5) 60px,
+      rgba(90, 21, 32, 0.5) 61px
+    );
+}
+
+/* Card Variant */
+.dori-border-card {
+  border: 3px solid var(--color-teal);
+}
+
+.dori-border-card::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(139, 26, 43, 0.25);
+  border-radius: calc(var(--radius-md) - 3px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Panel Variant */
+.dori-border-panel {
+  border: 2px solid var(--color-light-gray);
+  border-left: 6px solid var(--color-teal);
+}
+
+/* Gold Accent Variant */
+.dori-border-gold {
+  border: 3px solid var(--color-gold);
+  background: linear-gradient(to bottom, #ffffff, var(--color-cream));
+}
+
+.dori-border-gold::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px dashed var(--color-teal);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Crimson Accent Variant */
+.dori-border-crimson {
+  border: 3px solid var(--color-crimson);
+}
+
+.dori-border-crimson::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid var(--color-gold);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   POSTER VARIANT — Full illustrated-poster card
+   Teal backing (offset) → Parchment surface → Inner crimson border
+   ═══════════════════════════════════════════════ */
+.dori-border-poster {
+  border: var(--card-border-width) solid var(--dori-frame-teal, #0d4f4f);
+  background-color: var(--dori-parchment, #e8c84c);
+  border-radius: var(--card-radius);
+  box-shadow:
+    var(--card-offset) var(--card-offset) 0 0 var(--dori-frame-teal, #0d4f4f);
+  overflow: visible;
+}
+
+.dori-border-poster::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1.5px solid var(--dori-crimson-bg, #8b1a2b);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Secondary thin line inside poster */
+.dori-border-poster::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(13, 79, 79, 0.15);
+  border-radius: 1px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Interactive Hover */
+.dori-decorative-border.interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-teal-dark);
+}
+
+.dori-border-poster.interactive:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    calc(var(--card-offset) + 2px) calc(var(--card-offset) + 2px) 0 0 var(--dori-frame-teal, #0d4f4f);
+}
+
+.dori-border-inner-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .dori-border-hero {
+    border-width: 5px;
+    box-shadow:
+      0 var(--card-offset-mobile) 0 0 var(--dori-frame-teal-deep, #0a3a3a),
+      var(--card-offset-mobile) 0 0 0 var(--dori-frame-teal-deep, #0a3a3a),
+      var(--card-offset-mobile) var(--card-offset-mobile) 0 0 var(--dori-frame-teal-deep, #0a3a3a);
+  }
+
+  .dori-border-hero::before {
+    inset: 5px;
+    border-width: 1px;
+  }
+
+  .dori-border-poster {
+    box-shadow:
+      var(--card-offset-mobile) var(--card-offset-mobile) 0 0 var(--dori-frame-teal, #0d4f4f);
+  }
+
+  .dori-border-poster::before {
+    inset: 5px;
+  }
+
+  .dori-border-poster::after {
+    inset: 8px;
+  }
+}

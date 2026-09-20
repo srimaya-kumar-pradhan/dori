@@ -1,0 +1,68 @@
+/* DORI Global Styles
+   Applied after tokens.css — additional global utilities and mode overrides */
+
+/* ─── Scrollbar Styling ─────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* ─── Selection ─────────────────────────────────── */
+::selection {
+  background-color: var(--dori-teal-light);
+  color: var(--dori-teal-dark);
+}
+
+/* ─── Mode A: Public/Presentation ────────────────── */
+.mode-public {
+  --surface-primary: var(--dori-frame-teal);
+  --text-primary: var(--color-cream);
+}
+
+/* ─── Form Defaults ──────────────────────────────── */
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+}
+
+/* ─── Common Layout Utilities ────────────────────── */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.gap-6 { gap: var(--space-6); }
+.w-full { width: 100%; }
+.text-center { text-align: center; }
+
+/* ─── Reduced Motion Accessibility ──────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Focus Visible Accessibility ───────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-teal, #0d9488);
+  outline-offset: 2px;
+}

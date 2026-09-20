@@ -1,0 +1,75 @@
+.dori-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--weight-semibold);
+  border-radius: 9999px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge-sm {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6875rem;
+}
+
+.badge-md {
+  padding: 0.25rem 0.625rem;
+  font-size: var(--text-xs);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.badge-teal {
+  background-color: var(--color-teal-light);
+  color: var(--color-teal);
+  border: 1px solid rgba(26, 107, 106, 0.3);
+}
+
+.badge-crimson {
+  background-color: var(--color-crimson-light);
+  color: var(--color-crimson);
+  border: 1px solid rgba(139, 26, 43, 0.3);
+}
+
+.badge-gold {
+  background-color: var(--color-gold-light);
+  color: var(--color-gold-dark);
+  border: 1px solid rgba(201, 168, 76, 0.4);
+}
+
+.badge-success {
+  background-color: #e6f6ee;
+  color: var(--color-success);
+  border: 1px solid rgba(27, 122, 74, 0.3);
+}
+
+.badge-warning {
+  background-color: #fef7e6;
+  color: #b0882e;
+  border: 1px solid rgba(201, 168, 76, 0.4);
+}
+
+.badge-error {
+  background-color: #feecee;
+  color: var(--color-error);
+  border: 1px solid rgba(184, 40, 56, 0.3);
+}
+
+.badge-navy {
+  background-color: #eef2f7;
+  color: var(--color-navy);
+  border: 1px solid rgba(27, 42, 74, 0.3);
+}
+
+.badge-neutral {
+  background-color: var(--color-light-gray);
+  color: var(--color-warm-gray);
+  border: 1px solid #d8d4d0;
+}

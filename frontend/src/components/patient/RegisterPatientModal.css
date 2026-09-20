@@ -1,0 +1,485 @@
+/* ═══════════════════════════════════════════════════════════════
+   Live Patient Registration Modal — Robust Scrollable Architecture
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. Modal Overlay — Fullscreen backdrop with graceful centering */
+.modal-overlay.reg-patient-overlay,
+.reg-patient-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* 2. Modal Frame — Constrained to viewport, flex column */
+.modal-content.reg-patient-modal,
+.reg-patient-modal {
+  max-width: 760px;
+  width: 100%;
+  max-height: min(92vh, 900px);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card, #ffffff);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+}
+
+/* 3. Header — Pinned at the top */
+.reg-patient-header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  background: var(--surface-card, #ffffff);
+  flex-shrink: 0;
+}
+
+.modal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md, 8px);
+  background: rgba(212, 163, 115, 0.15);
+  border: 1px solid rgba(212, 163, 115, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1e293b);
+  margin: 0;
+}
+
+.modal-subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary, #64748b);
+  margin: 2px 0 0 0;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary, #5a6577);
+  padding: 6px;
+  border-radius: var(--radius-sm, 4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  background: var(--color-surface-sunken, #f1f5f9);
+  color: var(--color-text-primary, #1e293b);
+}
+
+/* 4. Quick Demo Scenario Seeds — Pinned right below header */
+.reg-quick-seeds {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--color-surface-sunken, #f8fafc);
+  border-bottom: 1px solid var(--color-border, #e2e8f0);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.seeds-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary, #94a3b8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.seed-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--color-border, #e2e8f0);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-primary, #0f766e);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.seed-chip:hover {
+  background: var(--color-primary-subtle, #f0fdfa);
+  border-color: var(--color-primary, #0f766e);
+  transform: translateY(-1px);
+}
+
+/* 5. Modal Body — THE ONE INTENTIONAL SCROLL CONTAINER */
+.reg-patient-body {
+  flex: 1 1 auto;
+  min-height: 0; /* CRITICAL for flex child vertical scrolling in Chrome, Firefox, Safari, Edge */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 20px;
+}
+
+/* Smooth custom scrollbar */
+.reg-patient-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reg-patient-body::-webkit-scrollbar-track {
+  background: var(--color-surface-sunken, #f8fafc);
+  border-radius: 4px;
+}
+
+.reg-patient-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.reg-patient-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.reg-patient-body {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 var(--color-surface-sunken, #f8fafc);
+}
+
+/* 6. Form Container */
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.form-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary, #0f766e);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 18px 0 12px 0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-border-subtle, #f1f5f9);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.field-label {
+  font-size: var(--text-xs, 12px);
+  font-weight: 600;
+  color: var(--color-text-primary, #1e293b);
+}
+
+.field-label.required::after {
+  content: " *";
+  color: var(--color-crimson, #e11d48);
+}
+
+.field-input,
+.field-select,
+.field-textarea {
+  background: var(--color-surface-sunken, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 10px 14px;
+  font-size: var(--text-sm, 14px);
+  color: var(--color-text-primary, #1e293b);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  width: 100%;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.field-input:focus,
+.field-select:focus,
+.field-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary, #0f766e);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.form-row-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form-row-grid-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.col-span-2 {
+  grid-column: span 1;
+}
+
+.consent-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(15, 118, 110, 0.05);
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  padding: 14px 16px;
+  border-radius: var(--radius-md, 8px);
+  margin: 18px 0 8px 0;
+}
+
+.consent-checkbox {
+  margin-top: 3px;
+  cursor: pointer;
+  accent-color: var(--color-primary, #0f766e);
+}
+
+.consent-label {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary, #475569);
+  cursor: pointer;
+}
+
+.reg-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 10px 14px;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+/* 7. Footer Actions — Accessible at the bottom of the form */
+.reg-patient-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+  padding-bottom: 8px;
+  margin-top: 24px;
+  border-top: 1px solid var(--color-border, #e2e8f0);
+  flex-shrink: 0;
+}
+
+/* 8. Success View Styles */
+.reg-success-view {
+  padding: 12px 4px;
+}
+
+.success-banner-card {
+  text-align: center;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px 20px;
+  margin-bottom: 20px;
+}
+
+.success-icon-wrap {
+  width: 56px;
+  height: 56px;
+  background: #dcfce7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px auto;
+}
+
+.success-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #166534;
+  margin: 0 0 6px 0;
+}
+
+.success-desc {
+  font-size: 0.85rem;
+  color: #15803d;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+.patient-receipt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  background: var(--color-surface-sunken, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.receipt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.receipt-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-text-tertiary, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.receipt-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1e293b);
+}
+
+.receipt-value-id code {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary, #0f766e);
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.success-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive Breakpoints
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .modal-overlay.reg-patient-overlay,
+  .reg-patient-overlay {
+    padding: 8px;
+    align-items: flex-start;
+  }
+
+  .modal-content.reg-patient-modal,
+  .reg-patient-modal {
+    width: 100%;
+    max-height: calc(100vh - 16px);
+    margin: 8px auto;
+    border-radius: var(--radius-md, 8px);
+  }
+
+  .reg-patient-header {
+    padding: 12px 14px;
+  }
+
+  .reg-quick-seeds {
+    padding: 8px 14px;
+  }
+
+  .reg-patient-body {
+    padding: 14px;
+  }
+
+  .form-row-grid-2,
+  .form-row-grid-3,
+  .patient-receipt-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .reg-patient-footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .reg-patient-footer button {
+    width: 100%;
+  }
+
+  .success-footer-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .success-footer-actions button {
+    width: 100%;
+  }
+}
+
+/* Landscape / short screen heights (e.g. laptop 768px with browser chrome) */
+@media (max-height: 680px) {
+  .modal-overlay.reg-patient-overlay,
+  .reg-patient-overlay {
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .modal-content.reg-patient-modal,
+  .reg-patient-modal {
+    max-height: calc(100vh - 16px);
+    margin: 8px auto;
+  }
+
+  .reg-patient-header {
+    padding: 10px 16px;
+  }
+
+  .reg-quick-seeds {
+    padding: 6px 16px;
+  }
+
+  .reg-patient-body {
+    padding: 12px 16px;
+  }
+
+  .form-section-title {
+    margin: 12px 0 8px 0;
+  }
+
+  .form-field {
+    margin-bottom: 8px;
+  }
+}

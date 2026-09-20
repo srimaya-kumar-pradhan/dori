@@ -1,0 +1,105 @@
+.dori-qr-card-container {
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.dori-qr-card {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: linear-gradient(180deg, #ffffff 0%, var(--color-off-white) 100%);
+}
+
+.qr-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px dashed var(--color-gold);
+  padding-bottom: var(--space-3);
+}
+
+.qr-card-tag {
+  font-size: 0.6875rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-crimson);
+  letter-spacing: 0.1em;
+}
+
+.qr-patient-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-dark-gray);
+  margin-top: 2px;
+}
+
+.qr-pseudo-id code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background-color: var(--color-cream);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--color-teal-dark);
+}
+
+.qr-code-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.qr-inner-frame {
+  padding: 8px;
+  background-color: #ffffff;
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.qr-scan-hint {
+  font-size: 0.75rem;
+  color: var(--color-warm-gray);
+  text-align: center;
+  max-width: 260px;
+}
+
+.qr-critical-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-2);
+  background-color: var(--color-cream);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(201, 168, 76, 0.4);
+}
+
+.critical-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.critical-label {
+  font-size: 0.6875rem;
+  color: var(--color-warm-gray);
+  text-transform: uppercase;
+}
+
+.critical-val {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-bold);
+  color: var(--color-dark-gray);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qr-card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: var(--color-warm-gray);
+  border-top: 1px dashed var(--color-light-gray);
+  padding-top: var(--space-2);
+}
